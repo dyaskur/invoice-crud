@@ -40,6 +40,7 @@ class InvoicesTableSeeder extends Seeder
             $issuer    = Company::query()->inRandomOrder()->first();
             $recipient = Company::query()->inRandomOrder()->first();
 
+            $tax = rand(10,25);
             $invoiceData = [
                 'subject'        => $faker->randomElement(['Hopeful', 'Enjoyable', 'Super', "Master", 'Special', 'Smart', "Intel"]).
                     " ".$faker->randomElement(['Marketing', 'Webinar', 'Exhibition', "Event", 'Vacation', "Genocide", "Omnicide"]).
@@ -48,9 +49,9 @@ class InvoicesTableSeeder extends Seeder
                 'issued_for'     => $recipient->id,
                 'sub_total'      => $subtotal,
                 'invoice_number' => str_pad($i + 1, 4, '0', STR_PAD_LEFT),
-                'tax_percentage' => 15,
-                'tax_amount'     => $subtotal * 0.15,
-                'total_payment'  => $subtotal * 0.15 + $subtotal,
+                'tax_percentage' => $tax,
+                'tax_amount'     => $subtotal * $tax/100,
+                'total_payment'  => $subtotal * $tax/100 + $subtotal,
                 'issue_date'     => $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
                 'due_date'       => $faker->dateTimeBetween('-1 years', 'now')->format('Y-m-d'),
                 'status'         => $faker->randomElement(['draft', 'paid', 'canceled']),

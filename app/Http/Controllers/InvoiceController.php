@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Invoice;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class InvoiceController extends Controller
 {
@@ -97,5 +100,26 @@ class InvoiceController extends Controller
         //
     }
 
+
+    public function json(Request $request): JsonResponse
+    {
+        $data = Invoice::query()
+            ->selectRaw('invoices.*, invoices.sub_total+invoices.tax_amount-invoices.total_payment as amount_due')
+            ->with('items:id,name')
+            ->with('issuer:id,name')
+            ->with('recipient:id,name');
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn(
+                'action',
+                function($data) {
+                    return
+                        '<a  class="btn btn-xs px-0 py-0"
+                        onclick="destroyData('.$data->id
+                        .')"  title="Delete"><i  class="bi-trash" style="font-size: 1rem; color: red;"></i></a> ';
+                }
+            )->make(true);
+    }
 
 }
