@@ -17,14 +17,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([CountriesTableSeeder::class]);
-        Company::factory(10)->create();
+        Company::factory(20)->create();
         ItemType::query()->insert([
                                       ['name' => 'Service'],
                                       ['name' => 'Electronic'],
                                       ['name' => 'House'],
                                       ['name' => 'Island'],
                                   ]);
-        Item::factory(10)->create();
+        Item::factory(20)->create();
         $this->call([InvoicesTableSeeder::class]);
     }
 }
