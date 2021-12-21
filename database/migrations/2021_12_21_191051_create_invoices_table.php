@@ -26,7 +26,7 @@ class CreateInvoicesTable extends Migration
             $table->decimal('total_payment', 12, 2);
             $table->foreignIdFor(Company::class, 'issued_by')->constrained('companies');
             $table->foreignIdFor(Company::class, 'issued_for')->constrained('companies');
-            $table->enum('status', ['draft', 'sent', 'paid', 'canceled']);
+            $table->enum('status', ['draft', 'paid', 'canceled']);
             $table->timestamps();
         });
     }

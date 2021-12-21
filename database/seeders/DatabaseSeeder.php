@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
+use App\Models\Item;
+use App\Models\ItemType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\User::factory(10)->create();
+        $this->call([CountriesTableSeeder::class]);
+        Company::factory(10)->create();
+        ItemType::query()->insert([
+                                      ['name' => 'Service'],
+                                      ['name' => 'Electronic'],
+                                      ['name' => 'House'],
+                                      ['name' => 'Island'],
+                                  ]);
+        Item::factory(10)->create();
+        $this->call([InvoicesTableSeeder::class]);
     }
 }

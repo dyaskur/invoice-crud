@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Invoice;
 use App\Models\Item;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,6 +20,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->smallInteger('quantity');
             $table->decimal('price', 8, 2);
             $table->foreignIdFor(Item::class)->constrained();
+            $table->foreignIdFor(Invoice::class)->constrained();
             $table->timestamps();
         });
     }
