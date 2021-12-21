@@ -20,10 +20,10 @@ class CreateInvoicesTable extends Migration
             $table->string('subject');
             $table->date('issue_date');
             $table->date('due_date');
-            $table->bigInteger('sub_total');
+            $table->decimal('sub_total', 12, 2);
             $table->smallInteger('tax_percentage')->default(0);
-            $table->bigInteger('tax_amount')->default(0);
-            $table->bigInteger('total_payment');
+            $table->decimal('tax_amount', 12, 2)->default(0);
+            $table->decimal('total_payment', 12, 2);
             $table->foreignIdFor(Company::class, 'issued_by')->constrained('companies');
             $table->foreignIdFor(Company::class, 'issued_for')->constrained('companies');
             $table->enum('status', ['draft', 'sent', 'paid', 'canceled']);

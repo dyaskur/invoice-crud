@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function(Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->bigInteger('price');
+            $table->decimal('price', 8, 2);
             $table->foreignIdFor(ItemType::class)->constrained();
 
             $table->timestamps();
