@@ -106,9 +106,9 @@ class InvoiceController extends Controller
      * @param  Request  $request
      * @param  int  $id
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         //
         $invoice = Invoice::find($id);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/invoices', function(Request $request) {
+    return response()->json(['data' => Invoice::all()]);
 });
+
+Route::get('/invoices/{id}', function(Request $request, $id) {
+    $invoice = Invoice::where('invoice_number', $id)->first();
+    if (!$invoice) {
+        return response()->json(['data' => null, 'message' => 'Record not found'], 404);
+    }
+
+    return response()->json(['data' => Invoice::all(), 'message' => 'Record found']);
+});
+
+
