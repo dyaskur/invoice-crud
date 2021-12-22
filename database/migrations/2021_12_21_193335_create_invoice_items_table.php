@@ -19,8 +19,8 @@ class CreateInvoiceItemsTable extends Migration
             $table->id();
             $table->smallInteger('quantity');
             $table->decimal('price', 8, 2);
-            $table->foreignIdFor(Item::class)->constrained();
-            $table->foreignIdFor(Invoice::class)->constrained();
+            $table->foreignIdFor(Item::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Invoice::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

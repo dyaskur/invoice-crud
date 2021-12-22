@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
@@ -35,7 +36,7 @@ class InvoiceController extends Controller
     public function create(): View|Factory|Application
     {
         $companies = Company::all();
-        $items = Item::all();
+        $items     = Item::all();
 
         return view('invoices.create', compact('companies', 'items'));
         //
@@ -46,12 +47,33 @@ class InvoiceController extends Controller
      *
      * @param  Request  $request
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(InvoiceRequest $request)
+    public function store(InvoiceRequest $request): RedirectResponse
     {
-        dd($request->all());
-        //
+        $invoice = Invoice::create($request->data());
+
+        if ($invoice) {
+            $items = collect($request->products);
+
+            $items = $items->map(function($item) {
+                $item['price'] = Item::find($item['item_id'])?->price ?? 0;
+
+                return $item;
+            });
+            $invoice->invoiceItems()->createMany($items->toArray());
+
+            $subtotal            = $items->sum(function($item) {
+                return $item['quantity'] * $item['price'];
+            });
+            $invoice->sub_total  = $subtotal;
+            $invoice->tax_amount = $subtotal * $invoice->tax_percentage / 100;
+            $invoice->save();
+
+            return redirect()->route('invoices.index')->with('message', 'Invoice created successfully');
+        } else {
+            return back()->withInput();
+        }
     }
 
     /**
@@ -89,6 +111,11 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $invoice = Invoice::find($id);
+
+        $invoice->update($request->only('status'));
+
+        return response()->json(['success' => 'Record is successfully updated']);
     }
 
     /**
@@ -96,11 +123,18 @@ class InvoiceController extends Controller
      *
      * @param  int  $id
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
         //
+        $invoice = Invoice::find($id);
+        if ($invoice) {
+            $invoice->delete();
+        }
+
+
+        return redirect()->route('invoices.index')->with('message', 'Invoice is deleted ');
     }
 
 

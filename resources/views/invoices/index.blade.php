@@ -9,7 +9,7 @@
         <table id="invoicesTable" class="table table-striped" style="width:100%">
             <thead>
             <tr>
-                <th>Invoice Number</th>
+                <th width="7%">Invoice Number</th>
                 <th>Subject</th>
                 <th>Issue Data</th>
                 <th>Due Date</th>
@@ -18,6 +18,7 @@
                 <th>Tax Amount</th>
                 <th>Total Payment</th>
                 <th>Amount Due</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -58,6 +59,15 @@
             },
             {data: 'total_payment', name: 'total_payment', render: $.fn.dataTable.render.number(',', '.', 2, '$')},
             {data: 'amount_due', name: 'amount_due', render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+            {
+              data: 'status', name: 'status', render: function (data, type, row) {
+                return ` <select onchange="updateStatus(this,${row.id})" name="status" class="form-select">
+                                                <option ${data === 'draft' ? 'selected' : ''} value="draft">draft</option>
+                                                <option ${data === 'paid' ? 'selected' : ''}  value="paid">paid</option>
+                                                <option ${data === 'canceled' ? 'selected' : ''} value="canceled">canceled</option>
+                                            </select>`
+              }
+            },
             {data: 'action', name: 'action', orderable: false, searchable: false, class: 'right-align'}
           ]
         })
@@ -85,6 +95,43 @@
           }
         })
       }
+
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+      })
+
+      function updateStatus (e, id) {
+        const data = {'status': e.value, '_method': 'PATCH'}
+        $.ajax({
+          type: 'POST',
+          url: '/invoices/' + id,
+          // The key needs to match your method's input parameter (case-sensitive).
+          data: JSON.stringify(data),
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json',
+          success: function (data) {
+            Swal.fire(
+              'Updated to ' + e.value,
+              'The invoice has been updated.',
+              'success'
+            )
+          },
+          error: function (error) {
+            console.log(error)
+            if (error.responseJSON.message)
+              alert(error.responseJSON.message)
+            else
+              alert('unknown error')
+          }
+        })
+      }
+        {!! session('message')?
+" Swal.fire(
+              '".session('message')."',
+            )"
+:''!!}
     </script>
     <form method="post" action="" style="display: none" id="deleteData">
         {{ csrf_field() }}

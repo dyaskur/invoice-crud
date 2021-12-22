@@ -109,6 +109,22 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="row mb-3">
+                                        <label for="status" class="col-sm-3 col-form-label">
+                                            Status</label>
+                                        <div class="col-sm-9">
+
+                                            <select id="status" name="status" class="form-select">
+                                                <option value="draft">draft</option>
+                                                <option value="paid">paid</option>
+                                                <option value="canceled">canceled</option>
+                                            </select>
+                                            @error('status')
+                                            <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong>
+                                            </div>
+                                            @enderror
+                                        </div>
+                                    </div>
 
                                     <div class="row mb-3">
                                         <table id="itemList" class="table table-striped" style="width:100%">
