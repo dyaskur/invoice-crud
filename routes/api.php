@@ -1,6 +1,6 @@
 <?php
 
-use App\Invoice;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/invoices', function(Request $request) {
-    return response()->json(['data' => Invoice::all()]);
+    $invoices = Invoice::query()->with('issuer:id,name', 'recipient:id,name');
+    if ($request->page !== null) {
+        return response()->json([
+                                    'data' => $invoices->paginate(10),
+                                ]);
+    }
+
+    return response()->json(['data' => $invoices->get()]);
 });
 
 Route::get('/invoices/{id}', function(Request $request, $id) {
