@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceRequest;
 use App\Models\Company;
 use App\Models\Invoice;
+use App\Models\Item;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -33,8 +35,9 @@ class InvoiceController extends Controller
     public function create(): View|Factory|Application
     {
         $companies = Company::all();
+        $items = Item::all();
 
-        return view('invoices.create', compact('companies'));
+        return view('invoices.create', compact('companies', 'items'));
         //
     }
 
@@ -45,7 +48,7 @@ class InvoiceController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(InvoiceRequest $request)
     {
         dd($request->all());
         //

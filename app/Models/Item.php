@@ -11,7 +11,7 @@ class Item extends Model
 {
     use HasFactory;
 
-    public function invoiceItems(): BelongsTo
+    public function itemType(): BelongsTo
     {
         return $this->belongsTo(ItemType::class);
     }
