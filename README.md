@@ -4,6 +4,8 @@ Demo Url: https://esb.yaskur.com
 
 Api Docs: https://documenter.getpostman.com/view/2743377/UVRBo71A
 
+ERD
+![ERD](erd.jpg?raw=true)
 
 How to install
 
