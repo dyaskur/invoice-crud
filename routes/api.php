@@ -28,7 +28,7 @@ Route::get('/invoices', function(Request $request) {
 
 Route::get('/invoices/{id}', function(Request $request, $id) {
     $invoice = Invoice::where('invoice_number', $id)
-        ->with('issuer:id,name,address_1,address2', 'recipient:id,name,address_1,address2')
+        ->with('issuer:id,name,address_1,address_2', 'recipient:id,name,address_1,address_2')
         ->with('items')
         ->first();
     if (!$invoice) {
