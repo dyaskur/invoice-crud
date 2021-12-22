@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function() {
-    return view('welcome');
+    return redirect(\route('invoices.index'));
 });
 Route::get('/invoices/json', [App\Http\Controllers\InvoiceController::class, 'json'])->name('invoices.json');
 
