@@ -28,7 +28,7 @@ Route::get('/invoices/{id}', function(Request $request, $id) {
         return response()->json(['data' => null, 'message' => 'Record not found'], 404);
     }
 
-    return response()->json(['data' => Invoice::all(), 'message' => 'Record found']);
+    return response()->json(['data' => $invoice, 'message' => 'Record found']);
 });
 
 

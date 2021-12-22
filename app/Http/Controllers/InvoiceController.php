@@ -125,7 +125,7 @@ class InvoiceController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         //
         $invoice = Invoice::find($id);

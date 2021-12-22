@@ -12,21 +12,21 @@ class InvoiceRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'subject' => 'required',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'subject.required' => 'Subject field is required.',
         ];
     }
 
-    public function data()
+    public function data(): array
     {
         return [
             'subject'        => $this->subject ?? $this->name,
